@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+    table, th, td {
+        border: 1px solid black;
+        border-collapse: collapse;
+        text-align: center
+    }
+    th, td {
+        padding: 5px;
+    }
+    </style>
+  </head>
+  <body>
+    <form action="test.py" method="post" onsubmit="return validTimes(this);">
+      <table align="center">
+        <tr>
+          <td>Enter Course Name:</td>
+          <td><input type="text" name="eName" size="18" required />
+        </tr>
+        <tr>
+          <td>Enter Start Time:</td>
+          <td><input type="text" name="start" size="18" required pattern="(1[0-2]|0?[1-9]):[0-5][0-9]( A| P)M" />
+        </tr>
+        <tr>
+          <td>Enter End Time:</td>
+          <td><input type="text" name="end" size="18" required pattern="(1[0-2]|0?[1-9]):[0-5][0-9]( A| P)M" />
+        </tr>
+        <tr>
+          <td>Enter Days (Need 1):</td>
+          <td>M:<input type="checkbox" name="Days[]" value="0" id="M" /> T:<input type="checkbox" name="Days[]" value="1" id="T" /> W:<input type="checkbox" name="Days[]" value="2" id="W" /> R:<input type="checkbox" name="Days[]" value="3" id="R" /> F:<input type="checkbox" name="Days[]" value="4" id="F" /></td>
+        </tr>
+      </table>
+      <br></br>
+      <div style="text-align:center">  
+        <input type="submit" value="Add Event" />
+      </div>
+    </form>
+    <form action="send.py" method="post">
+      <div style="text-align:center">
+        <input type="submit" value="Send File" />
+      </div>
+    </form>
+    <!-- Following script altered from http://lab.artlung.com/validate-checkbox/ -->
+    <script type="text/javascript" language="JavaScript">
+      function check(form) {
+	      if (
+	      form.M.checked == false &&
+	      form.T.checked == false &&
+	      form.W.checked == false &&
+        form.R.checked == false &&
+        form.F.checked == false) 
+	      {
+		      alert ('Please select at least one day.');
+		      return false;
+	      } else { 	
+		      return true;
+	      }
+      }
+      function validTimes(form) {
+        var st = form.start.value;
+        var en = form.end.value;
+        var start_arr = st.slice(0,-3).split(":");
+        var end_arr = en.slice(0,-3).split(":");
+        if (st.slice(-2) == "PM" && parseInt(start_arr[0]) != 12){
+          start_arr[0] = parseInt(start_arr[0]) + 12;
+        }
+        if (en.slice(-2) == "PM"){
+          end_arr[0] = parseInt(end_arr[0]) + 12;
+        }
+        if (start_arr[0] == 12 && st.slice(-2) == "AM") {
+          start_arr[0] = 0;
+        }
+        if (end_arr[0] == 12 && en.slice(-2) == "AM") {
+          end_arr[0] = 0;
+        }
+        var st_time = parseInt(start_arr[0])*60*60 + parseInt(start_arr[1])*60;
+        var en_time = parseInt(end_arr[0])*60*60 + parseInt(end_arr[1])*60;
+        if (st_time >= en_time) {
+          alert ('End time must be after start time.');
+          return false;
+        } else {
+          return check(form);
+        }
+      }
+    </script>
+  </body>
+</html>
