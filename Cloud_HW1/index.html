@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Just Kidding</title>
+    <link rel="stylesheet" href="stylish.css">
+  </head>
+  <body>
+    <h1>Click the image to gain a random cat fact!</h1>
+    <form action="index.php" method="post">
+      <input type="image" align="middle" src="internet.png" alt="Submit" name="imgy" /><br>
+    </form>
+    <p>
+      <?php if( isset($_POST["imgy"])){
+        $facts = file("Catfacts2.csv", FILE_IGNORE_NEW_LINES);
+        $line_num = rand(0, count($facts)-1);
+        echo $facts[$line_num];
+      }
+      echo filter_var($_POST["imgy"]);
+      ?>
+    </p>
+  </body>
+</html>
